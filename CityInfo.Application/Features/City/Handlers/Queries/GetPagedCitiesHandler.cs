@@ -29,11 +29,9 @@ namespace CityInfo.Application.Features.City.Handlers.Queries
             var cities = _unitOfWork.CityRepository.GetAll(true,
                 c => c.PointOfInterests);
 
-            var mappedCities = _mapper.Map<PagedList<Domain.City>>(cities);
-
             if (string.IsNullOrEmpty(request.CityRequestParameters.SearchTerm) &&
                 string.IsNullOrEmpty(request.CityRequestParameters.FilterTerm))
-                return Task.FromResult(PagedList<Domain.City>.ToPagedList(mappedCities, request.CityRequestParameters.PageNumber,
+                return Task.FromResult(PagedList<Domain.City>.ToPagedList(cities.ToList(), request.CityRequestParameters.PageNumber,
                     request.CityRequestParameters.PageSize));
 
             if (!string.IsNullOrWhiteSpace(request.CityRequestParameters.FilterTerm) ||
@@ -52,7 +50,7 @@ namespace CityInfo.Application.Features.City.Handlers.Queries
             }
 
 
-            return Task.FromResult(PagedList<Domain.City>.ToPagedList(mappedCities, request.CityRequestParameters!.PageSize,
+            return Task.FromResult(PagedList<Domain.City>.ToPagedList(cities.ToList(), request.CityRequestParameters!.PageSize,
                 request.CityRequestParameters.PageSize));
         }
     }

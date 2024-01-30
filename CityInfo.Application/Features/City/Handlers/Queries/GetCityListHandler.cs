@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CityInfo.Application.Features.City.Handlers.Queries
 {
-    public class GetCityListHandler : IRequestHandler<GetCityListRequest, List<Domain.City>>
+    public class GetCityListHandler : IRequestHandler<GetCityList, List<Domain.City>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -19,7 +19,7 @@ namespace CityInfo.Application.Features.City.Handlers.Queries
             _mapper = mapper;
         }
 
-        public Task<List<Domain.City>> Handle(GetCityListRequest request, CancellationToken cancellationToken)
+        public Task<List<Domain.City>> Handle(GetCityList request, CancellationToken cancellationToken)
         {
             var cities = (!request.TrackChanges ?
                 _unitOfWork.CityRepository.GetAll(false, c => c.PointOfInterests) :

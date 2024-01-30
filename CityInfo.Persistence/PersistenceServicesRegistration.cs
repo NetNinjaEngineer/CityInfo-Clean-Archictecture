@@ -1,4 +1,5 @@
 ﻿using CityInfo.Application.Contracts.Persistence;
+using CityInfo.Persistence.Managers;
 using CityInfo.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,8 @@ public static class PersistenceServicesRegistration
         services.AddScoped<ICityRepository, CityRepository>();
 
         services.AddScoped<IPointOfInterestRepository, PointOfInterestRepository>();
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
 
