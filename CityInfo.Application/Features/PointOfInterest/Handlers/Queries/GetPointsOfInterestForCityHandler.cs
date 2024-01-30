@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CityInfo.Application.DTOs;
+using CityInfo.Application.DTOs.PointOfInterest;
 using CityInfo.Application.Features.PointOfInterest.Requests;
 using CityInfo.Application.Persistence.Contracts;
 using MediatR;

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CityInfo.Application.DTOs;
+using CityInfo.Application.Exceptions;
 using CityInfo.Application.Features.City.Requests;
 using CityInfo.Application.Persistence.Contracts;
 using MediatR;
@@ -9,27 +9,27 @@ using System.Threading.Tasks;
 
 namespace CityInfo.Application.Features.City.Handlers.Queries
 {
-    public class GetCityHandler : IRequestHandler<GetCity, CityDto>
+    public class GetCityHandler : IRequestHandler<GetCity, Domain.City>
     {
-        private readonly ICityRepository _cityRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetCityHandler(ICityRepository cityRepository, IMapper mapper)
+        public GetCityHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _cityRepository = cityRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public Task<CityDto> Handle(GetCity request, CancellationToken cancellationToken)
+        public Task<Domain.City> Handle(GetCity request, CancellationToken cancellationToken)
         {
             var city = (!request.TrackChanges ?
-                _cityRepository.GetAll(false, c => c.PointOfInterests)
+                _unitOfWork.CityRepository.GetAll(false, c => c.PointOfInterests)
                 .FirstOrDefault(c => c.Id == request.CityId) :
-                _cityRepository.GetAll(true, c => c.PointOfInterests)
+                _unitOfWork.CityRepository.GetAll(true, c => c.PointOfInterests)
                 .FirstOrDefault(c => c.Id == request.CityId)
-                );
+                ) ?? throw new NotFoundException(nameof(Domain.City), request.CityId);
 
-            return Task.FromResult(_mapper.Map<CityDto>(city));
+            return Task.FromResult(_mapper.Map<Domain.City>(city));
 
         }
     }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CityInfo.Application.DTOs;
 using CityInfo.Application.Features.City.Requests;
 using CityInfo.Application.Persistence.Contracts;
 using CityInfo.Application.RequestFeatures;
@@ -11,28 +10,30 @@ using System.Threading.Tasks;
 
 namespace CityInfo.Application.Features.City.Handlers.Queries
 {
-    public class GetPagedCitiesHandler : IRequestHandler<GetPagedCities, PagedList<CityDto>>
+    public class GetPagedCitiesHandler : IRequestHandler<GetPagedCities, PagedList<Domain.City>>
     {
-        private readonly ICityRepository _cityRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetPagedCitiesHandler(ICityRepository cityRepository, IMapper mapper)
+        public GetPagedCitiesHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _cityRepository = cityRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public Task<PagedList<CityDto>> Handle(GetPagedCities request, CancellationToken cancellationToken)
+        public Task<PagedList<Domain.City>> Handle(GetPagedCities request, CancellationToken cancellationToken)
         {
             if (request.CityRequestParameters is null)
                 throw new ArgumentNullException(nameof(request.CityRequestParameters));
 
-            var cities = _cityRepository.GetAll(true, c => c.PointOfInterests);
-            var mappedCities = _mapper.Map<PagedList<CityDto>>(cities);
+            var cities = _unitOfWork.CityRepository.GetAll(true,
+                c => c.PointOfInterests);
+
+            var mappedCities = _mapper.Map<PagedList<Domain.City>>(cities);
 
             if (string.IsNullOrEmpty(request.CityRequestParameters.SearchTerm) &&
                 string.IsNullOrEmpty(request.CityRequestParameters.FilterTerm))
-                return Task.FromResult(PagedList<CityDto>.ToPagedList(mappedCities, request.CityRequestParameters.PageNumber,
+                return Task.FromResult(PagedList<Domain.City>.ToPagedList(mappedCities, request.CityRequestParameters.PageNumber,
                     request.CityRequestParameters.PageSize));
 
             if (!string.IsNullOrWhiteSpace(request.CityRequestParameters.FilterTerm) ||
@@ -51,7 +52,7 @@ namespace CityInfo.Application.Features.City.Handlers.Queries
             }
 
 
-            return Task.FromResult(PagedList<CityDto>.ToPagedList(mappedCities, request.CityRequestParameters!.PageSize,
+            return Task.FromResult(PagedList<Domain.City>.ToPagedList(mappedCities, request.CityRequestParameters!.PageSize,
                 request.CityRequestParameters.PageSize));
         }
     }

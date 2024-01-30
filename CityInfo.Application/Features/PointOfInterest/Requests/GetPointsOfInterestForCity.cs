@@ -1,4 +1,4 @@
-﻿using CityInfo.Application.DTOs;
+﻿using CityInfo.Application.DTOs.PointOfInterest;
 using MediatR;
 using System.Collections.Generic;
 

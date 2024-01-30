@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using CityInfo.Application.DTOs;
-using CityInfo.Domain;
+using CityInfo.Application.DTOs.City;
+using CityInfo.Application.DTOs.PointOfInterest;
 
 namespace CityInfo.Application.Profiles
 {
@@ -8,9 +8,16 @@ namespace CityInfo.Application.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<City, CityDto>().ReverseMap();
+            CreateMap<Domain.City, CityForCreationDto>().ReverseMap();
 
-            CreateMap<PointOfInterest, PointOfInterestDto>().ReverseMap();
+            CreateMap<Domain.City, CityForUpdateDto>().ReverseMap();
+
+            CreateMap<Domain.PointOfInterest, PointOfInterestDto>().ReverseMap();
+
+            CreateMap<Domain.PointOfInterest, PointOfInterestForCreationDto>().ReverseMap();
+
+            CreateMap<Domain.PointOfInterest, PointOfInterestForUpdateDto>().ReverseMap();
+
         }
     }
 }
