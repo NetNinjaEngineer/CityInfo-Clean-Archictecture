@@ -34,6 +34,9 @@ namespace CityInfo.Application.Features.City.Handlers.Commands
                 response.Success = false;
                 response.Message = "Creation Failed";
                 response.Errors = validationResult.Errors.Select(q => q.ErrorMessage).ToList();
+
+                return response;
+
             }
 
             var cityForCreation = _mapper.Map<Domain.City>(request.CityForCreationDto);

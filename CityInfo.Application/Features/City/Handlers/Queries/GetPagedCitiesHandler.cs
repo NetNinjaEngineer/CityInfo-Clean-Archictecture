@@ -34,24 +34,28 @@ namespace CityInfo.Application.Features.City.Handlers.Queries
                 return Task.FromResult(PagedList<Domain.City>.ToPagedList(cities.ToList(), request.CityRequestParameters.PageNumber,
                     request.CityRequestParameters.PageSize));
 
-            if (!string.IsNullOrWhiteSpace(request.CityRequestParameters.FilterTerm) ||
-                !string.IsNullOrWhiteSpace(request.CityRequestParameters.SearchTerm))
+            if (!string.IsNullOrWhiteSpace(request.CityRequestParameters.FilterTerm))
             {
                 var filterTerm = request.CityRequestParameters?.FilterTerm?.Trim();
-                var searchTerm = request.CityRequestParameters?.SearchTerm?.Trim();
 
                 cities = cities
-                .Where(c => c.Name!.Equals(filterTerm, StringComparison.CurrentCultureIgnoreCase) ||
-                (
-                    c.Name!.Contains(searchTerm!, StringComparison.CurrentCultureIgnoreCase) ||
-                    c.Country!.Contains(searchTerm!, StringComparison.CurrentCultureIgnoreCase)
-                 )).ToList();
+                .Where(c => c.Name!.Equals(filterTerm, StringComparison.CurrentCultureIgnoreCase));
 
             }
 
+            if (!string.IsNullOrWhiteSpace(request.CityRequestParameters!.SearchTerm))
+            {
+                var searchTerm = request.CityRequestParameters?.SearchTerm?.Trim();
 
-            return Task.FromResult(PagedList<Domain.City>.ToPagedList(cities.ToList(), request.CityRequestParameters!.PageSize,
-                request.CityRequestParameters.PageSize));
+                cities = cities.Where(c =>
+                    c.Name!.Contains(searchTerm!, StringComparison.CurrentCultureIgnoreCase) ||
+                    c.Country!.Contains(searchTerm!, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            }
+
+
+            return Task.FromResult(PagedList<Domain.City>
+                .ToPagedList(cities.ToList(), request.CityRequestParameters!.PageSize,
+                    request.CityRequestParameters.PageSize));
         }
     }
 }

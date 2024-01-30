@@ -36,6 +36,9 @@ namespace CityInfo.Application.Features.City.Handlers.Commands
                 response.Success = false;
                 response.Message = "Update Failed.";
                 response.Errors = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
+
+                return response;
+
             }
 
             var city = _unitOfWork.CityRepository.GetAll(true,

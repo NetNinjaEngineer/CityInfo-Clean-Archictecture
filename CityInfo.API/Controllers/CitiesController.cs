@@ -1,9 +1,9 @@
-﻿using CityInfo.Application.Features.City.Requests;
+﻿using CityInfo.Application.DTOs.City;
+using CityInfo.Application.Features.City.Requests;
+using CityInfo.Application.Features.City.Requests.Commands;
 using CityInfo.Application.RequestFeatures;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CityInfo.API.Controllers
 {
@@ -13,21 +13,28 @@ namespace CityInfo.API.Controllers
     {
         private readonly IMediator _mediator;
 
-        public CitiesController(IMediator mediator)
+        public CitiesController(IMediator mediator) => _mediator = mediator;
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCityAsync([FromBody] CityForCreationDto requestModel)
         {
-            _mediator = mediator;
+            var response = await _mediator.Send(new CreateCityCommand { CityForCreationDto = requestModel });
+
+            return !response.Success ? BadRequest(response) : Ok(response);
+
         }
 
-        // GET: api/<CitiesController>
-        [HttpGet("GetCityListRequest")]
+        [Route("CityListRequest")]
+        [HttpGet]
         public async Task<IActionResult> GetCityListRequestAsync()
         {
             var citiesList = await _mediator.Send(new GetCityList { TrackChanges = true });
             return Ok(citiesList);
         }
 
-        [HttpGet("GetPagedCities")]
-        public async Task<IActionResult> GetPagedCitiesAsync([FromQuery] CityRequestParameters cityRequestParameters)
+        [Route("PagedCities")]
+        [HttpGet]
+        public async Task<IActionResult> GetCitiesByRequestParametersAsync([FromQuery] CityRequestParameters cityRequestParameters)
         {
             var pagedResult = await _mediator.Send(new GetPagedCities
             {
@@ -37,29 +44,49 @@ namespace CityInfo.API.Controllers
             return Ok(pagedResult);
         }
 
-        // GET api/<CitiesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{cityId}")]
+        public async Task<IActionResult> GetCityAsync(int cityId, bool trackChanges)
         {
-            return "value";
+            try
+            {
+                return Ok(await _mediator.Send(new GetCity { CityId = cityId, TrackChanges = trackChanges }));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // POST api/<CitiesController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+
+        [HttpPut("{cityId}")]
+        public async Task<IActionResult> UpdateCityAsync(int cityId, CityForUpdateDto requestModel)
         {
+            try
+            {
+                return Ok(await _mediator.Send(new UpdateCityCommand
+                {
+                    CityId = cityId,
+                    CityForUpdateDto = requestModel
+                }));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // PUT api/<CitiesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpDelete("{cityId}")]
+        public async Task<IActionResult> DeleteCityAsync(int cityId)
         {
+            try
+            {
+                return Ok(await _mediator.Send(new DeleteCityCommand { CityId = cityId }));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // DELETE api/<CitiesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }
