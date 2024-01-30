@@ -1,4 +1,4 @@
-﻿using CityInfo.Application.Persistence.Contracts;
+﻿using CityInfo.Application.Contracts.Persistence;
 using System.Linq.Expressions;
 
 namespace CityInfo.Persistence.Repositories;

@@ -1,4 +1,4 @@
-﻿using CityInfo.Application.Persistence.Contracts;
+﻿using CityInfo.Application.Contracts.Persistence;
 using CityInfo.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

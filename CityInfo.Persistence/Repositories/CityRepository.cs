@@ -1,4 +1,4 @@
-﻿using CityInfo.Application.Persistence.Contracts;
+﻿using CityInfo.Application.Contracts.Persistence;
 using CityInfo.Domain;
 
 namespace CityInfo.Persistence.Repositories;

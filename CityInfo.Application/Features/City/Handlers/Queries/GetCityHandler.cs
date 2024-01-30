@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using CityInfo.Application.Contracts.Persistence;
 using CityInfo.Application.Exceptions;
 using CityInfo.Application.Features.City.Requests;
-using CityInfo.Application.Persistence.Contracts;
 using MediatR;
 using System.Linq;
 using System.Threading;

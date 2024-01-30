@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using CityInfo.Application.Contracts.Persistence;
 using CityInfo.Application.Features.City.Requests;
-using CityInfo.Application.Persistence.Contracts;
 using CityInfo.Application.RequestFeatures;
 using MediatR;
 using System;

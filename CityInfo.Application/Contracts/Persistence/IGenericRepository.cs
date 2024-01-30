@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace CityInfo.Application.Persistence.Contracts
+namespace CityInfo.Application.Contracts.Persistence
 {
     public interface IGenericRepository<T> where T : class
     {

@@ -6,7 +6,10 @@ namespace CityInfo.Domain
     public class City : BaseEntity
     {
         public string? Country { get; set; }
+
         public int Population { get; set; }
-        public ICollection<PointOfInterest> PointOfInterests { get; set; } = new List<PointOfInterest>();
+
+        public ICollection<PointOfInterest> PointOfInterests { get; set; }
+            = new List<PointOfInterest>();
     }
 }
